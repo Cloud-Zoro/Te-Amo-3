@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Una canción solo para ti</title>
+  <meta name="theme-color" content="#0a2630">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎵</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/regalo/style.css">
+</head>
+<body>
+  <main class="escena" id="escena">
+
+    <!-- Piano roll: la melodía se va armando con cada respuesta -->
+    <section class="roll-wrap" aria-label="Tu melodía">
+      <div class="roll" id="roll" aria-hidden="true">
+        <div class="playhead" id="playhead"></div>
+      </div>
+    </section>
+
+    <!-- 1. Inicio -->
+    <section class="pantalla activa" id="p-inicio">
+      <h1>Una canción solo para ti</h1>
+      <p class="sub">Cada respuesta que des hará sonar una nota. Al final se escucha nuestra melodía.</p>
+      <button class="btn grande" id="btn-empezar" type="button">Empezar</button>
+      <p class="aviso">Sube el volumen un poquito 🎧</p>
+    </section>
+
+    <!-- 2. Preguntas -->
+    <section class="pantalla" id="p-quiz">
+      <p class="contador" id="contador"></p>
+      <h2 id="pregunta" tabindex="-1"></h2>
+      <div class="opciones" id="opciones"></div>
+      <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
+      <button class="btn" id="btn-siguiente" type="button" hidden>Siguiente</button>
+    </section>
+
+    <!-- 3. Melodía lista + pregunta final -->
+    <section class="pantalla" id="p-final">
+      <h2 id="final-titulo">Tu melodía está lista</h2>
+      <p class="sub" id="final-sub">Escúchala una vez, y luego tengo una última pregunta.</p>
+      <div class="zona-final" id="zona-final" hidden>
+        <h2 class="gran">¿Me quieres tanto como Miku quiere a su puerro?</h2>
+        <div class="botones-final">
+          <button class="btn grande" id="btn-si" type="button">Sí, muchísimo</button>
+          <button class="btn fantasma" id="btn-no" type="button">No</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Carta -->
+    <section class="pantalla" id="p-carta">
+      <h2 class="carta-titulo">Para mi amor</h2>
+      <div class="carta" id="carta">
+        <p>Quería regalarte algo diferente, algo que hiciera sonar tu mundo.</p><p>Gracias por cada risa, por cada canción compartida y por hacerme sentir en casa.</p><p>Escribe aquí lo que de verdad sientes. Esta carta es tuya.</p>
+        <p class="firma">Con todo mi cariño,<br>Tu nombre</p>
+      </div>
+      
+      <button class="btn fantasma" id="btn-repetir" type="button">Escuchar la melodía otra vez</button>
+    </section>
+
+  </main>
+
+  
+
+  <canvas id="confeti" aria-hidden="true"></canvas>
+
+  <script id="datos-preguntas" type="application/json">[{"texto": "\u00bfDe qu\u00e9 color es el cabello de Miku?", "opciones": ["Rosa", "Turquesa", "Morado", "Rubio"], "correcta": 1, "ok": "\u00a1Turquesa, como el cielo cuando estoy contigo!", "mal": "Uy, eso no es\u2026 \u00a1int\u00e9ntalo otra vez!"}, {"texto": "\u00bfCu\u00e1l es la verdura favorita de Miku?", "opciones": ["Zanahoria", "Br\u00f3coli", "Puerro (negi)", "Tomate"], "correcta": 2, "ok": "\u00a1Claro que s\u00ed! Miku y su puerro, inseparables.", "mal": "Mmm, casi\u2026 pista: es larga y verde."}, {"texto": "\u00bfQu\u00e9 d\u00eda es el cumplea\u00f1os de Miku?", "opciones": ["31 de agosto", "14 de febrero", "1 de enero", "25 de diciembre"], "correcta": 0, "ok": "\u00a1Exacto! Ya sabes cu\u00e1ndo hay fiesta.", "mal": "No es ese d\u00eda. \u00a1Otra vez!"}, {"texto": "\u00bfD\u00f3nde fue nuestra primera cita?", "opciones": ["En un parque", "En un caf\u00e9", "En el cine", "En casa"], "correcta": null, "ok": "\u00a1Qu\u00e9 recuerdo tan lindo!", "mal": ""}, {"texto": "\u00bfCu\u00e1l es nuestra comida favorita para compartir?", "opciones": ["Pizza", "Sushi", "Helado", "Completos"], "correcta": null, "ok": "\u00a1Ahora me dio hambre!", "mal": ""}, {"texto": "\u00bfQu\u00e9 es lo que m\u00e1s te gusta hacer cuando estamos juntos?", "opciones": ["Ver series o pel\u00edculas", "Salir a caminar", "Escuchar m\u00fasica", "Quedarnos conversando"], "correcta": null, "ok": "A m\u00ed tambi\u00e9n me encanta eso contigo.", "mal": ""}, {"texto": "\u00bfCu\u00e1nto te quiero?", "opciones": ["Mucho", "Much\u00edsimo", "Hasta la luna", "M\u00e1s que a todos los puerros del mundo"], "correcta": null, "ok": "\u00a1Todas son correctas, y se quedan cortas!", "mal": ""}]</script>
+  <script id="datos-no" type="application/json">["No", "\u00bfSegura?", "Pi\u00e9nsalo bien\u2026", "Ese bot\u00f3n est\u00e1 roto", "Mejor di que s\u00ed :3"]</script>
+  <script src="static/regalo/app.js"></script>
+</body>
+</html>

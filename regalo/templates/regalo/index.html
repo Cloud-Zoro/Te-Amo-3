@@ -1,0 +1,82 @@
+{% load static %}<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{{ c.titulo }}</title>
+  <meta name="theme-color" content="#0a2630">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎵</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'regalo/style.css' %}">
+</head>
+<body>
+  <main class="escena" id="escena">
+
+    <!-- Piano roll: la melodía se va armando con cada respuesta -->
+    <section class="roll-wrap" aria-label="Tu melodía">
+      <div class="roll" id="roll" aria-hidden="true">
+        <div class="playhead" id="playhead"></div>
+      </div>
+    </section>
+
+    <!-- 1. Inicio -->
+    <section class="pantalla activa" id="p-inicio">
+      <h1>{{ c.titulo }}</h1>
+      <p class="sub">{{ c.subtitulo }}</p>
+      <button class="btn grande" id="btn-empezar" type="button">Empezar</button>
+      <p class="aviso">Sube el volumen un poquito 🎧</p>
+    </section>
+
+    <!-- 2. Preguntas -->
+    <section class="pantalla" id="p-quiz">
+      <p class="contador" id="contador"></p>
+      <h2 id="pregunta" tabindex="-1"></h2>
+      <div class="opciones" id="opciones"></div>
+      <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
+      <button class="btn" id="btn-siguiente" type="button" hidden>Siguiente</button>
+    </section>
+
+    <!-- 3. Melodía lista + pregunta final -->
+    <section class="pantalla" id="p-final">
+      <h2 id="final-titulo">Tu melodía está lista</h2>
+      <p class="sub" id="final-sub">Escúchala una vez, y luego tengo una última pregunta.</p>
+      <div class="zona-final" id="zona-final" hidden>
+        <h2 class="gran">{{ c.pregunta_final }}</h2>
+        <div class="botones-final">
+          <button class="btn grande" id="btn-si" type="button">{{ c.si_texto }}</button>
+          <button class="btn fantasma" id="btn-no" type="button">{{ c.no_texto }}</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Carta -->
+    <section class="pantalla" id="p-carta">
+      <h2 class="carta-titulo">Para {{ c.nombre_ella }}</h2>
+      <div class="carta" id="carta">
+        {% for parrafo in c.carta %}<p>{{ parrafo }}</p>{% endfor %}
+        <p class="firma">Con todo mi cariño,<br>{{ c.tu_nombre }}</p>
+      </div>
+      {% if c.fotos %}
+      <div class="galeria" id="galeria">
+        {% for f in c.fotos %}<img src="{% static 'regalo/img/' %}{{ f }}" alt="Un recuerdo nuestro" loading="lazy">{% endfor %}
+      </div>
+      {% endif %}
+      <button class="btn fantasma" id="btn-repetir" type="button">Escuchar la melodía otra vez</button>
+    </section>
+
+  </main>
+
+  {% if c.musica %}
+  <audio id="musica" loop preload="auto" src="{% static 'regalo/audio/' %}{{ c.musica }}"></audio>
+  <button class="btn-musica" id="btn-musica" type="button" aria-label="Pausar o reanudar la música" hidden>♪</button>
+  {% endif %}
+
+  <canvas id="confeti" aria-hidden="true"></canvas>
+
+  {{ c.preguntas|json_script:"datos-preguntas" }}
+  {{ c.no_mensajes|json_script:"datos-no" }}
+  <script src="{% static 'regalo/app.js' %}"></script>
+</body>
+</html>

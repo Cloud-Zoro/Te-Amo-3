@@ -1,0 +1,180 @@
+:root {
+  --noche: #0a2630;
+  --panel: #10394a;
+  --linea: rgba(57, 197, 187, .14);
+  --miku: #39c5bb;
+  --menta: #bff5ef;
+  --rosa: #e12885;
+  --texto: #effffd;
+  --texto-suave: #9fd3ce;
+  --fuente: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Nunito", system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: var(--fuente);
+  color: var(--texto);
+  background: var(--noche);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Fondo: cuadrícula de editor de voz */
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  background:
+    linear-gradient(var(--linea) 1px, transparent 1px) 0 0 / 100% 44px,
+    linear-gradient(90deg, var(--linea) 1px, transparent 1px) 0 0 / 88px 100%;
+  mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 75%);
+  pointer-events: none;
+}
+
+.escena {
+  position: relative;
+  min-height: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: max(24px, env(safe-area-inset-top)) 20px max(40px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* ---------- Piano roll ---------- */
+.roll-wrap { padding-top: 8px; }
+.roll {
+  position: relative;
+  height: 148px;
+  border-radius: 14px;
+  background:
+    repeating-linear-gradient(to bottom, transparent 0 17px, var(--linea) 17px 18px),
+    var(--panel);
+  border: 2px solid rgba(57, 197, 187, .35);
+  overflow: hidden;
+}
+.nota {
+  position: absolute;
+  height: 14px;
+  border-radius: 7px;
+  background: var(--miku);
+  box-shadow: 0 0 14px rgba(57, 197, 187, .75);
+  transform-origin: left center;
+  animation: aparece .35s cubic-bezier(.2, 1.4, .4, 1) both;
+}
+.nota.fantasma { background: transparent; box-shadow: none; border: 1.5px dashed rgba(57, 197, 187, .35); animation: none; }
+.nota.suena { background: var(--menta); box-shadow: 0 0 22px var(--menta); }
+.nota.rosa { background: var(--rosa); box-shadow: 0 0 16px rgba(225, 40, 133, .8); }
+@keyframes aparece { from { transform: scaleX(0); opacity: 0; } to { transform: scaleX(1); opacity: 1; } }
+.playhead {
+  position: absolute; top: 0; bottom: 0; left: 0; width: 2px;
+  background: var(--rosa);
+  box-shadow: 0 0 10px var(--rosa);
+  opacity: 0;
+}
+
+/* ---------- Pantallas ---------- */
+.pantalla { display: none; flex-direction: column; align-items: flex-start; gap: 18px; }
+.pantalla.activa { display: flex; animation: entra .5s ease both; }
+@keyframes entra { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+h1 {
+  margin: 12px 0 0;
+  font-size: clamp(2.6rem, 11vw, 4.6rem);
+  line-height: 1.02;
+  font-weight: 900;
+  letter-spacing: -.02em;
+  color: var(--menta);
+  text-shadow: 0 0 28px rgba(57, 197, 187, .55);
+}
+h2 { margin: 0; font-size: clamp(1.5rem, 6vw, 2rem); line-height: 1.2; font-weight: 700; }
+h2.gran { font-size: clamp(1.7rem, 7vw, 2.4rem); font-weight: 900; color: var(--menta); }
+h2:focus { outline: none; }
+.sub { margin: 0; max-width: 46ch; color: var(--texto-suave); font-size: 1.08rem; }
+.aviso { margin: 0; font-size: .9rem; color: var(--texto-suave); opacity: .8; }
+.contador { margin: 0; font-size: .95rem; color: var(--miku); font-weight: 700; }
+
+/* ---------- Botones ---------- */
+.btn {
+  font: inherit;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--noche);
+  background: var(--miku);
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 26px;
+  min-height: 48px;
+  cursor: pointer;
+  transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+  box-shadow: 0 6px 0 #1f8c84;
+}
+.btn:hover { background: #55d8cf; }
+.btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #1f8c84; }
+.btn.grande { font-size: 1.25rem; padding: 14px 34px; }
+.btn.fantasma {
+  background: transparent; color: var(--menta);
+  border: 2px solid rgba(57, 197, 187, .6); box-shadow: none;
+}
+.btn.fantasma:hover { background: rgba(57, 197, 187, .15); }
+.btn.fantasma:active { transform: none; }
+:focus-visible { outline: 3px solid var(--rosa); outline-offset: 3px; }
+
+/* ---------- Preguntas ---------- */
+.opciones { display: grid; gap: 12px; width: 100%; }
+.opcion {
+  font: inherit; font-size: 1.1rem; font-weight: 500;
+  text-align: left; color: var(--texto);
+  background: var(--panel);
+  border: 2px solid rgba(57, 197, 187, .3);
+  border-radius: 16px;
+  padding: 14px 18px;
+  min-height: 52px;
+  cursor: pointer;
+  transition: border-color .15s ease, background .15s ease, transform .15s ease;
+}
+.opcion:hover:not(:disabled) { border-color: var(--miku); transform: translateX(4px); }
+.opcion.bien { background: rgba(57, 197, 187, .25); border-color: var(--miku); }
+.opcion.mal { background: rgba(225, 40, 133, .18); border-color: var(--rosa); animation: sacude .4s; }
+.opcion:disabled { cursor: default; }
+@keyframes sacude { 25% { transform: translateX(-7px); } 75% { transform: translateX(7px); } }
+.feedback { margin: 0; min-height: 1.6em; font-weight: 700; color: var(--menta); }
+.feedback.error { color: #ff8cc2; }
+
+/* ---------- Final ---------- */
+.zona-final { display: flex; flex-direction: column; gap: 26px; width: 100%; animation: entra .5s ease both; }
+.botones-final { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+#btn-no.escapa { position: fixed; z-index: 20; transition: left .25s ease, top .25s ease; }
+
+/* ---------- Carta ---------- */
+.carta-titulo { font-size: clamp(2rem, 9vw, 3rem); font-weight: 900; color: var(--menta); }
+.carta {
+  background: var(--panel);
+  border-left: 5px solid var(--miku);
+  border-radius: 6px 20px 20px 6px;
+  padding: 22px 24px;
+  display: flex; flex-direction: column; gap: 14px;
+  font-size: 1.12rem;
+}
+.carta p { margin: 0; }
+.carta p.oculto { opacity: 0; transform: translateY(8px); }
+.carta p { transition: opacity .8s ease, transform .8s ease; }
+.firma { color: var(--miku); font-weight: 700; margin-top: 6px !important; }
+.galeria { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; width: 100%; }
+.galeria img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 16px; border: 3px solid rgba(57, 197, 187, .5); }
+
+/* ---------- Música y confeti ---------- */
+.btn-musica {
+  position: fixed; right: 16px; bottom: 16px; z-index: 30;
+  width: 48px; height: 48px; border-radius: 50%;
+  border: 2px solid var(--miku); background: var(--panel); color: var(--miku);
+  font-size: 1.4rem; cursor: pointer;
+}
+.btn-musica.callada { opacity: .5; text-decoration: line-through; }
+#confeti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
